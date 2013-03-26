@@ -342,17 +342,19 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 		}
 
 		if (strlen(text)) {
-			*output << (char*)target->getKeyText();
-			if (font && (outputformat == FMT_HTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
-				*output << ": <font face=\"";
-				*output << font;
-				*output << "\">";
-			}
-			else if (outputformat == FMT_RTF) {
-				*output << ": {\\f1 ";
-			}
-			else {
-				*output << ": ";
+	        	if (!(optionfilters & OP_NOPRINTREFS)) {
+				*output << (char*)target->getKeyText();
+				if (font && (outputformat == FMT_HTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
+					*output << ": <font face=\"";
+					*output << font;
+					*output << "\">";
+				}
+				else if (outputformat == FMT_RTF) {
+					*output << ": {\\f1 ";
+				}
+				else {
+					*output << ": ";
+				}
 			}
 			*output << text;
 			if (font && (outputformat == FMT_HTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
@@ -362,9 +364,11 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 				*output << "}";
 			}
 
-			*output << "(";
-			*output << target->getName();
-			*output << ")\n";
+		  	if (!(optionfilters & OP_NOPRINTMODNAME)) {
+				*output << "(";
+				*output << target->getName();
+				*output << ")\n";
+			}
 		}
 
 		if (outputformat == FMT_RTF) {
@@ -404,17 +408,19 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 			  target->setKey(element->getLowerBound());
 				*parser = element->getUpperBound();
 				while (maxverses && *target->getKey() <= *parser) {
-					*output << (char*)target->getKeyText();
-					if (font && (outputformat == FMT_HTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
-						*output << ": <font face=\"";
-						*output << font;
-						*output << "\">";
-					}
-					else if (outputformat == FMT_RTF) {
-						*output << ": {\\f1 ";
-					}
-					else {
-						*output << ": ";
+	        			if (!(optionfilters & OP_NOPRINTREFS)) {
+						*output << (char*)target->getKeyText();
+						if (font && (outputformat == FMT_HTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
+							*output << ": <font face=\"";
+							*output << font;
+							*output << "\">";
+						}
+						else if (outputformat == FMT_RTF) {
+							*output << ": {\\f1 ";
+						}
+						else {
+							*output << ": ";
+						}
 					}
 					*output << (const char*)*target;
 					if (font && (outputformat == FMT_HTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
@@ -433,7 +439,11 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 					else if (outputformat == FMT_GBF)
 						*output << "<CM>";
 
-					*output << "\n";
+	        			if (optionfilters & OP_NOPRINTNEWLINES) {
+						*output << " ";
+					} else {
+						*output << "\n";
+					}
 
 					if (*target->getKey() == *parser)
 					  break;
@@ -443,17 +453,19 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 			}
 			else {
 				target->setKey(*listkey.GetElement(i));
-				*output << (char*)target->getKeyText();
-				if (font && (outputformat == FMT_HTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
-					*output << ": <font face=\"";
-					*output << font;
-					*output << "\">";
-				}
-				else if (outputformat == FMT_RTF) {
-					*output << ": {\\f1 ";
-				}
-				else {
-					*output << ": ";
+	        		if (!(optionfilters & OP_NOPRINTREFS)) {
+					*output << (char*)target->getKeyText();
+					if (font && (outputformat == FMT_HTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
+						*output << ": <font face=\"";
+						*output << font;
+						*output << "\">";
+					}
+					else if (outputformat == FMT_RTF) {
+						*output << ": {\\f1 ";
+					}
+					else {
+						*output << ": ";
+					}
 				}
 				*output << (const char*)*target;
 				if (font && (outputformat == FMT_HTML || outputformat == FMT_THML || outputformat == FMT_CGI)) {
@@ -472,14 +484,21 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 				else if (outputformat == FMT_GBF)
 					*output << "<CM>";
 
-				*output << "\n";
+	        		if (optionfilters & OP_NOPRINTNEWLINES) {
+					*output << " ";
+				} else {
+					*output << "\n";
+				}
 				maxverses--;
 			}
 		}
 
-		*output << "(";
-		*output << target->getName();
-		*output << ")\n";
+	        if (!(optionfilters & OP_NOPRINTMODNAME)) {
+	  		*output << "(";
+			*output << target->getName();
+			*output << ")";
+		}
+		*output << "\n";
 
 		if (outputformat == FMT_RTF) {
 			*output << "}";

@@ -38,7 +38,7 @@ void printsyntax() {
  	fprintf (stderr, "diatheke <-b module_name> [-s search_type] [-r search_range]\n");
 	fprintf (stderr, "[-o option_filters] [-m maximum_verses] [-f output_format]\n");
 	fprintf (stderr, "[-e output_encoding] [-t script] [-v variant#(-1=all|0|1)]\n");
-	fprintf (stderr, "[-l locale] <-k query_key>\n");
+	fprintf (stderr, "[-l locale] [--no-refs] [--no-mod-name] [--no-newlines] <-k query_key>\n");
 	fprintf (stderr, "\n");
 	fprintf (stderr, "If <book> is \"system\" you may use these system keys: \"modulelist\",\n");
 	fprintf (stderr, "\"modulelistnames\", and \"localelist\".");
@@ -54,6 +54,9 @@ void printsyntax() {
 	fprintf (stderr, "Valid output_format values are: GBF, ThML, RTF, HTML, HTMLHREF, XHTML, OSIS, CGI, and plain (def)\n");
 	fprintf (stderr, "Valid output_encoding values are: Latin1, UTF8 (def), UTF16, HTML, and RTF\n");
 	fprintf (stderr, "Valid locale values depend on installed locales. en is default.\n");
+	fprintf (stderr, "--no-refs suppresses reference printing in output\n");
+	fprintf (stderr, "--no-mod-name suppresses the module name in output\n");
+	fprintf (stderr, "--no-newlines replaces new lines with a space in output\n");
 	fprintf (stderr, "The query_key must be the last argument because all following\n");
 	fprintf (stderr, "  arguments are added to the key.\n\n");
 
@@ -236,6 +239,18 @@ int main(int argc, char **argv)
 				optionfilters |= OP_TRANSLITERATOR;
 				i++;
 			}
+		}
+		else if (!::stricmp("--no-mod-name", argv[i])) {
+			if (i+1 <= argc)
+				optionfilters |= OP_NOPRINTMODNAME;
+		}
+		else if (!::stricmp("--no-refs", argv[i])) {
+			if (i+1 <= argc)
+				optionfilters |= OP_NOPRINTREFS;
+		}
+		else if (!::stricmp("--no-newlines", argv[i])) {
+			if (i+1 <= argc)
+				optionfilters |= OP_NOPRINTNEWLINES;
 		}
 	}
 	
