@@ -1,0 +1,8 @@
+install:
+  - sudo apt-get update
+  - sudo apt-get install libicu-dev libclucene-dev
+  - ./autogen.sh
+  - ./usrinst.sh
+language: c
+notifications:
+script: ./usrinst.sh && make
